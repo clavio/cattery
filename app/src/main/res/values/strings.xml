@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">The Cattery!</string>
+    <string name="internet_required">Internet connection required to use this application</string>
+    <string name="error_processing">There was an error processing your request.  Please try again later.</string>
 </resources>

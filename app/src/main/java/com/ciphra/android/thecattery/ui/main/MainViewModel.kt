@@ -42,4 +42,14 @@ class MainViewModel : ViewModel() {
             }
         })
     }
+
+    //TODO make this actually vote
+    fun voteUp(){
+        if(!isProcessingCat) retrieveOneRandomCat()
+    }
+
+    //TODO make this actually vote
+    fun voteDown(){
+        if(!isProcessingCat) retrieveOneRandomCat()
+    }
 }
