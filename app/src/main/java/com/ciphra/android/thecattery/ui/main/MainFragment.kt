@@ -6,7 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import com.ciphra.android.thecattery.Cat
 import com.ciphra.android.thecattery.R
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
 
@@ -24,7 +28,12 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel.retrieveOneRandomCat()
+
+        val loadCatObserver = Observer<Cat>{
+                Picasso.get().load(it.url).into(cat_image_view)
+             }
+        viewModel.thisCat.observe(requireActivity(), loadCatObserver)
     }
 
 }
