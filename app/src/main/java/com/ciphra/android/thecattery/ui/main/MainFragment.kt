@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.ciphra.android.thecattery.*
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.main_fragment.*
 
@@ -30,9 +31,26 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-
+        thumbs_up_button.alpha = .5f
+        thumbs_down_button.alpha = .5f
         val loadCatObserver = Observer<Cat>{
-                Picasso.get().load(it.url).into(cat_image_view)
+                thumbs_up_button.setOnClickListener {  }
+                thumbs_down_button.setOnClickListener {  }
+                thumbs_up_button.alpha = .5f
+                thumbs_down_button.alpha = .5f
+                Picasso.get().load(it.url).into(cat_image_view, object: Callback {
+
+                    override fun onSuccess() {
+                        thumbs_up_button.setOnClickListener { viewModel.voteUp() }
+                        thumbs_down_button.setOnClickListener { viewModel.voteDown() }
+                        thumbs_up_button.alpha = 1f
+                        thumbs_down_button.alpha = 1f
+                    }
+
+                    override fun onError(e : Exception) {
+                        viewModel.retrieveOneRandomCat()
+                    }
+                })
                 viewModel.isProcessingCat = false
         }
         viewModel.thisCat.observe(requireActivity(), loadCatObserver)
@@ -40,8 +58,7 @@ class MainFragment : Fragment() {
             displayError(REQUEST_ERROR)
         }
         viewModel.failure.observe(requireActivity(), failureObserver)
-        thumbs_up_button.setOnClickListener { viewModel.voteUp() }
-        thumbs_down_button.setOnClickListener { viewModel.voteDown() }
+
         if(isConnected(requireContext())) viewModel.retrieveOneRandomCat() else displayError(NO_INTERNET)
     }
 
