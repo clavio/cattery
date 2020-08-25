@@ -34,6 +34,7 @@ class MainFragment : Fragment() {
         thumbs_up_button.alpha = .5f
         thumbs_down_button.alpha = .5f
         val loadCatObserver = Observer<Cat>{
+                viewModel.hasCat = true
                 thumbs_up_button.setOnClickListener {  }
                 thumbs_down_button.setOnClickListener {  }
                 thumbs_up_button.alpha = .5f
@@ -59,7 +60,10 @@ class MainFragment : Fragment() {
         }
         viewModel.failure.observe(requireActivity(), failureObserver)
 
-        if(isConnected(requireContext())) viewModel.retrieveOneRandomCat() else displayError(NO_INTERNET)
+        if(isConnected(requireContext())) {
+            if(viewModel.hasCat) viewModel.thisCat.postValue(viewModel.thisCat.value)
+            else viewModel.retrieveOneRandomCat()
+        }else displayError(NO_INTERNET)
     }
 
     fun displayError(code : Int){

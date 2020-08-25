@@ -15,6 +15,7 @@ class MainViewModel : ViewModel() {
     var thisCat = SingleLiveEvent<Cat>()
     var failure = SingleLiveEvent<Boolean>()
     var isProcessingCat = false
+    var hasCat = false
     fun retrieveOneRandomCat(){
         isProcessingCat = true
         val retrofit = Retrofit.Builder()
